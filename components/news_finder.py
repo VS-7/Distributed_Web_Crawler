@@ -33,7 +33,7 @@ class NewsFinderApp:
         return ft.Container(
             padding=ft.padding.all(10),
             margin=ft.margin.only(bottom=10),
-            bgcolor=ft.colors.WHITE10,
+            bgcolor=ft.colors.with_opacity(0.2, ft.colors.BLACK),
             border_radius=ft.border_radius.all(10),
             content=ft.Column(
                 controls=[
@@ -43,7 +43,7 @@ class NewsFinderApp:
                             ft.TextButton(
                                 text="Acessar Página Web",
                                 on_click=lambda e: e.page.launch_url(news[1]),
-                                style=ft.ButtonStyle(bgcolor=ft.colors.WHITE, color=ft.colors.BLACK)
+                                style=ft.ButtonStyle(bgcolor=ft.colors.WHITE, color=ft.colors.BLACK, shape=ft.RoundedRectangleBorder(radius=10))
                             ),
                             ft.TextButton(
                                 text="Ver Detalhes",
@@ -77,6 +77,7 @@ class NewsFinderApp:
             )
             modal = ft.AlertDialog(
                 bgcolor=ft.colors.BLACK87,
+                shape=ft.RoundedRectangleBorder(radius=5),
                 title=ft.Text("Detalhes da Notícia"),
                 content=news_details,
                 actions_alignment=ft.MainAxisAlignment.END,
@@ -96,56 +97,81 @@ class NewsFinderApp:
         self.news_list.update()
 
     def main(self, page: ft.Page):
-        page.padding = ft.padding.symmetric(horizontal=20, vertical=10)
-        page.bgcolor = '#101014'
+        page.padding = 0
+        page.theme_mode = ft.ThemeMode.DARK
         
-
-        title = ft.Row(
-            alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
-            controls=[
-            ]
+        page.theme = ft.Theme(
+            color_scheme=ft.ColorScheme(
+                primary='#192233',
+                on_primary='#fffff',
+                background='#0d121c'
+                
+            )
         )
 
+        '''banner=ft.Row(
+            controls= [
+                ft.Image(src='../assets/icons/banner.png', width=600, height=300),
+                ft.Container(
+                    width=400,
+                    height=300,
+                    bgcolor=ft.colors.with_opacity(0.3, ft.colors.BLACK),
+                    margin=ft.margin.only(left=-40),
+                    content=ft.Column(
+                        controls=[
+                            ft.Text(value="Documentação se encontra no Github")
+                        ]
+                    )
+                )
+            ]
+        )
+        '''
         searchbar = ft.Container(
+            padding=ft.padding.only(top=20),
             content= ft.Row(
                 alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
                 controls= [
                      ft.TextField(
                         prefix_icon=ft.icons.SEARCH,
                         hint_text='Digite o título da notícia...',
-                        hint_style=ft.TextStyle(size=15),
+                        hint_style=ft.TextStyle(size=15, color=ft.colors.WHITE),
                         on_submit=self.search,
-                        border_radius=ft.border_radius.all(50),
+                        border_radius=ft.border_radius.all(15),
                         width=300,
                         height=40,
-                        bgcolor=ft.colors.GREY_900,
-                        border_color=ft.colors.GREY_900,
+                        bgcolor=ft.colors.with_opacity(0.3, ft.colors.BLACK),
+                        border_color=ft.colors.with_opacity(0.3, ft.colors.BLACK),
                     ),
-                    ft.CircleAvatar(),
-
                 ]
             ),
         )
-        
-       
+
         self.news_list = ft.ListView(
             expand=True,
             controls=[],
         )
 
-        layout = ft.Row(
+        layout = ft.Container(
+            padding=ft.padding.only(top=20, left=10, right=20, bottom=20),
+            gradient=ft.LinearGradient(
+                        begin=ft.alignment.top_left,
+                        end=ft.alignment.bottom_right,
+                        colors=[ft.colors.PRIMARY, ft.colors.BACKGROUND]
+                    ),
+            
             expand=True,
-            controls=[
-                self.sidebar,  
-                ft.Column(
-                    expand=True,
-                    controls=[
-                        title,
-                        searchbar,
-                        self.news_list,
-                    ]
-                )
-            ]
+            content= ft.Row(
+                controls=[
+                    self.sidebar,  
+                    ft.Column(
+                        expand=True,
+                        controls=[
+                            searchbar,
+                            self.news_list,
+                         ]
+                    ),
+                ]
+            ),
         )
 
         page.add(layout)

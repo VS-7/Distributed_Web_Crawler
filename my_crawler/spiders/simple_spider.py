@@ -5,6 +5,11 @@ class SimpleSpider(scrapy.Spider):
     name = "simple_spider"
    # allowed_domains = ["g1.globo.com", "noticias.uol.com.br", "cnnbrasil.com.br"]
 
+    custom_settings = {
+        'ROBOTSTXT_OBEY': True,  # Respeitar o robots.txt
+        'LOG_LEVEL': 'INFO'  # Configurar nível de log para informação
+    }
+    
     def __init__(self, *args, **kwargs):
         super(SimpleSpider, self).__init__(*args, **kwargs)
 
